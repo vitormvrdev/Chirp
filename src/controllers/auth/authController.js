@@ -1,23 +1,24 @@
-const User = require('../models/User');
+const User = require('../../models/user');
 const bcrypt = require('bcryptjs');
 
 exports.register = async (req, res) => {
+    console.log("Dados recebidos:", req.body);
     // Receber os dados do formulário (ou do Postman)
-    const { firstName, lastName, username, email, password } = req.body;
+    const { firstName, lastName, userhandle, email, password } = req.body;
 
     // Validação básica
-    if (!firstName || !lastName || !username || !email || !password) {
+    if (!firstName || !lastName || !userhandle || !email || !password) {
         return res.status(400).json({ message: "Por favor preencha todos os campos." });
     }
 
     try {
-        // Verificar se o user já existe
+        // Verificar se user já existe
         const userExists = await User.findOne({ 
-            $or: [{ email: email }, { username: username }] 
+            $or: [{ email: email }, { userhandle: userhandle }] 
         });
 
         if (userExists) {
-            return res.status(400).json({ message: "Username ou Email já registado." });
+            return res.status(400).json({ message: "Userhandle ou Email já registado." });
         }
 
         // Encriptar a password
@@ -28,7 +29,7 @@ exports.register = async (req, res) => {
         const user = await User.create({
             firstName,
             lastName,
-            username,
+            userhandle,
             email,
             password: hashedPassword // Guardamos a versão encriptada!
         });
@@ -39,7 +40,7 @@ exports.register = async (req, res) => {
             success: true,
             user: {
                 id: user._id,
-                username: user.username,
+                userhandle: user.userhandle,
                 email: user.email
             }
         });
