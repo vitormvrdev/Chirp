@@ -48,4 +48,5 @@ const UserSchema = new Schema({
     }]
 }, { timestamps: true }); // Cria automaticamente createdAt e updatedAt
 
-module.exports = mongoose.model('User', UserSchema);
+// Verifica se mongoose.models.User já existe. Se sim, usa-o. Se não, cria.
+module.exports = mongoose.models.User || mongoose.model('User', UserSchema);
