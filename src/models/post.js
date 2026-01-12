@@ -20,6 +20,12 @@ const PostSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: 'User' 
     }],
+
+    retweetData: {
+        type: Schema.Types.ObjectId,
+        ref: 'Post' // Aponta para o próprio modelo 'Post'
+    },
+    
     // Opcional: Para teres imagens nos posts no futuro
     imageUrl: {
         type: String
