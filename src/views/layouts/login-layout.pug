@@ -1,0 +1,34 @@
+doctype html
+html(lang="pt")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Login - Chirp
+        
+        // --- TAILWIND CSS (Via CDN para desenvolvimento rápido) ---
+        script(src="https://cdn.tailwindcss.com")
+        
+        // --- CONFIGURAÇÃO DO TEMA (Cores do Twitter) ---
+        script.
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            blue: {
+                                400: '#33a1f2', 
+                                500: '#1DA1F2', // A cor clássica do Twitter
+                                600: '#1a91da',
+                            },
+                            gray: {
+                                light: '#F5F8FA', // Fundo clássico
+                                border: '#E1E8ED'
+                            }
+                        }
+                    }
+                }
+            }
+
+    body.bg-gray-light
+        .min-h-screen.flex.items-center.justify-center.p-4
+            // O block content vai injetar o formulário aqui
+            block content

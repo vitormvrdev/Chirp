@@ -1,13 +1,38 @@
-doctype html
-html(lang="pt")
-    head
-        title Login - TwitterClone
-        // Vamos usar Bootstrap por CDN para ficar bonito rápido
-        link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
-    body
-        .container.mt-5
-            h1 Login
-            form(method="post") 
-                input.form-control.mb-3(type="text", name="logUsername", placeholder="Username ou Email", required="")
-                input.form-control.mb-3(type="password", name="logPassword", placeholder="Password", required="")
-                button.btn.btn-primary(type="submit") Entrar
+extends layouts/login-layout.pug
+
+block content
+    .bg-white.w-full.max-w-md.rounded-2xl.shadow-lg.p-8
+        // Ícone ou Título
+        h1.text-3xl.font-bold.mb-6.text-gray-900 Login
+        
+        form(method="post")
+            // Input Username
+            .mb-4
+                input(
+                    type="text" 
+                    name="logUsername" 
+                    placeholder="Username ou Email" 
+                    required=""
+                    class="w-full px-4 py-3 border border-gray-border rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-gray-50 transition-colors"
+                )
+            
+            // Input Password
+            .mb-6
+                input(
+                    type="password" 
+                    name="logPassword" 
+                    placeholder="Password" 
+                    required=""
+                    class="w-full px-4 py-3 border border-gray-border rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-gray-50 transition-colors"
+                )
+            
+            // Botão Entrar (Redondo e Azul)
+            button(
+                type="submit"
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-full transition duration-200 shadow-md"
+            ) Entrar
+
+        // Link para registo
+        .mt-6.text-center
+            p.text-gray-600.text-sm Ainda não tens conta? 
+                a.text-blue-500.hover.underline.font-semibold(href="/register") Regista-te aqui

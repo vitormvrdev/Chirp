@@ -1,0 +1,33 @@
+extends layouts/main-layout.pug
+
+block content
+    // --- CAIXA DE CRIAR POST ---
+    .flex.p-4.border-b.border-gray-border
+        // Avatar do utilizador
+        .flex-shrink-0.mr-4
+            img.w-12.h-12.rounded-full(src="/images/profile_pic.png", alt="User")
+        
+        // Área de Texto
+        .w-full
+            textarea#postTextarea.w-full.border-none.focus_ring-0.text-xl.resize-none.placeholder-gray-500(
+                placeholder="O que está a acontecer?!" 
+                rows="2"
+            )
+            
+            .flex.justify-between.items-center.mt-2
+                // Ícones de anexo (imagem, gif, etc - decorativo por agora)
+                .text-blue-500.space-x-4
+                    i.fa-regular.fa-image.cursor-pointer
+                    i.fa-solid.fa-list-ul.cursor-pointer
+                    i.fa-regular.fa-face-smile.cursor-pointer
+
+                // Botão de Publicar
+                button#submitPostButton.bg-blue-500.text-white.font-bold.px-5.py-2.rounded-full.opacity-50.cursor-not-allowed(disabled) 
+                    | Tweetar
+
+    // --- LISTA DE POSTS ---
+    .postsContainer
+        // Aqui é onde os posts vão aparecer dinamicamente via Javascript
+        // Por enquanto, fica vazio ou podes por um texto temporário
+        .p-4.text-center.text-gray-500
+            p Ainda não há posts. Sê o primeiro!

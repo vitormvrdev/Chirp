@@ -1,0 +1,72 @@
+doctype html
+html(lang="pt")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{pageTitle} - Chirp
+        
+        // --- TAILWIND CSS ---
+        script(src="https://cdn.tailwindcss.com")
+        
+        // --- FONT AWESOME ---
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css")
+
+        // --- CONFIGURAÇÃO DO TEMA ---
+        script.
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            blue: { 500: '#1DA1F2', 600: '#1a91da' },
+                            gray: { light: '#F5F8FA', border: '#E1E8ED', hover: '#E8F5FE' }
+                        }
+                    }
+                }
+            }
+
+    body.bg-white
+        .container.mx-auto.h-screen.flex.max-w-7xl
+            
+            // --- COLUNA 1: BARRA LATERAL (Esquerda) ---
+            // AQUI ESTAVA O ERRO: Mudámos para class="..."
+            div(class="w-20 md:w-64 flex-shrink-0 border-r border-gray-border pt-2 px-2 flex flex-col items-center md:items-start")
+                
+                // Logo
+                a(class="p-3 rounded-full hover:bg-blue-50 mb-2" href="/")
+                    i.fa-solid.fa-dove.text-3xl.text-blue-500
+                
+                // Navegação
+                nav.space-y-2.w-full
+                    a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl font-bold" href="/")
+                        i.fa-solid.fa-house.text-2xl.mr-4
+                        span(class="hidden md:inline") Home
+                    
+                    a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl" href="/search")
+                        i.fa-solid.fa-magnifying-glass.text-2xl.mr-4
+                        span(class="hidden md:inline") Explorar
+
+                    a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl" href="/notifications")
+                        i.fa-solid.fa-bell.text-2xl.mr-4
+                        span(class="hidden md:inline") Notificações
+
+                    a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl" href="/profile")
+                        i.fa-regular.fa-user.text-2xl.mr-4
+                        span(class="hidden md:inline") Perfil
+                    
+                    a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl" href="/logout")
+                        i.fa-solid.fa-arrow-right-from-bracket.text-2xl.mr-4
+                        span(class="hidden md:inline") Logout
+
+            // --- COLUNA 2: CONTEÚDO PRINCIPAL (Meio) ---
+            .flex-grow.border-r.border-gray-border.max-w-2xl
+                // Título da Página
+                div(class="sticky top-0 z-10 bg-white bg-opacity-95 backdrop-blur-sm border-b border-gray-border px-4 py-3")
+                    h2.text-xl.font-bold.text-gray-900 #{pageTitle}
+
+                block content
+
+            // --- COLUNA 3: WIDGETS (Direita) ---
+            div(class="hidden lg:block w-80 pl-8 pt-4")
+                .bg-gray-light.rounded-2xl.p-4
+                    h3.font-bold.text-xl.mb-2 O que está a acontecer
+                    p.text-gray-500 Em breve...
