@@ -4,6 +4,8 @@ html(lang="pt")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title #{pageTitle} - Chirp
+
+        script(src="https://code.jquery.com/jquery-3.7.0.min.js")
         
         // --- TAILWIND CSS ---
         script(src="https://cdn.tailwindcss.com")
@@ -70,3 +72,6 @@ html(lang="pt")
                 .bg-gray-light.rounded-2xl.p-4
                     h3.font-bold.text-xl.mb-2 O que está a acontecer
                     p.text-gray-500 Em breve...
+    
+        // O nosso script personalizado
+        script(src="/js/common.js")

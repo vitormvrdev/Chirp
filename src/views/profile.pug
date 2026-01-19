@@ -1,0 +1,58 @@
+extends layouts/main-layout.pug
+
+block content
+    if !profileUser
+        span.p-4.text-red-500 Utilizador não encontrado.
+    else
+        script.
+            var profileUserId = '!{profileUser._id}';
+
+        // --- CABEÇALHO DO PERFIL ---
+        .flex.flex-col.border-b.border-gray-border
+            
+            // Capa (Azul)
+            .h-32.bg-blue-500.relative
+                // Foto de Perfil (Sobreposta)
+                .absolute.-bottom-16.left-4
+                    img(src=profileUser.profilePic || "/images/profilePic.jpeg", alt="Profile Pic").w-32.h-32.rounded-full.border-4.border-white.bg-white
+
+            // Dados do User (Nome, Handle, Bio)
+            .pt-16.px-4.pb-4.flex.flex-col
+                
+                // Botão Editar / Seguir (Canto direito)
+                .flex.justify-end.mb-2
+                    if userLoggedIn._id != profileUser._id
+                        a.border.border-blue-500.text-blue-500.font-bold.px-4.py-1.rounded-full.hover_bg-blue-50(href=`/messages/${profileUser._id}`)
+                            i.fa-regular.fa-envelope
+                        // Aqui depois metemos o botão de Seguir
+                    else 
+                         a.border.border-gray-300.text-gray-900.font-bold.px-4.py-1.rounded-full.ml-2.hover_bg-gray-100(href="/profile/settings") Editar Perfil
+
+                // Nomes
+                span.font-bold.text-xl.text-gray-900 #{profileUser.firstName} #{profileUser.lastName}
+                span.text-gray-500 @#{profileUser.userhandle}
+                
+                // Data de adesão
+                span.text-gray-500.mt-2.text-sm
+                    i.fa-regular.fa-calendar.mr-2
+                    | Aderiu em #{new Date(profileUser.createdAt).toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' })}
+
+                // Seguidores (Texto estático por agora)
+                .flex.mt-3.space-x-4
+                    a(href=`/profile/${profileUser.userhandle}/following`).text-gray-500.hover_underline
+                        span.font-bold.text-gray-900.mr-1 0
+                        | A seguir
+                    a(href=`/profile/${profileUser.userhandle}/followers`).text-gray-500.hover_underline
+                        span.font-bold.text-gray-900.mr-1 0
+                        | Seguidores
+
+        // --- ABAS (Posts / Respostas) ---
+        .flex.border-b.border-gray-border.mt-2
+            a.flex-1.text-center.p-4.font-bold.text-blue-500.border-b-4.border-blue-500.cursor-pointer Posts
+            a.flex-1.text-center.p-4.font-medium.text-gray-500.hover_bg-gray-50.cursor-pointer Respostas
+
+        // --- ONDE OS POSTS VÃO CARREGAR ---
+        .postsContainer
+
+        // --- SCRIPT ESPECÍFICO DO PERFIL ---
+        script(src="/js/profile.js")
