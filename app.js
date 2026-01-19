@@ -7,6 +7,7 @@ const registerRoute = require('./src/routes/registerRoutes');
 const loginRoute = require('./src/routes/loginRoutes');
 const apiRoutes = require('./src/routes/api/posts'); // Vamos usar isto para os posts já a seguir
 const profileRoute = require('./src/routes/profileRoutes');
+const notificationRoute = require('./src/routes/notificationRoutes');
 require('dotenv').config();
 
 // 1. Conectar à Base de Dados
@@ -57,17 +58,9 @@ app.get('/search', requireLogin, (req, res) => {
     res.render('feed', payload);
 });
 
-app.get('/notifications', requireLogin, (req, res) => {
-    const payload = { pageTitle: "Notificações", userLoggedIn: req.session.user };
-    res.render('feed', payload);
-});
-
-app.get('/profile', requireLogin, (req, res) => {
-    const payload = { pageTitle: "O meu Perfil", userLoggedIn: req.session.user };
-    res.render('feed', payload);
-});
-
 app.use('/profile', requireLogin, profileRoute);
+
+app.use('/notifications', requireLogin, notificationRoute);
 
 // --- ROTA PRINCIPAL (FEED) ---
 app.get('/', requireLogin, (req, res) => {

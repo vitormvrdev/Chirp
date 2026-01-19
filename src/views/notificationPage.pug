@@ -1,0 +1,17 @@
+extends layouts/main-layout.pug
+
+block content
+    .flex.flex-col
+        each notification in notifications
+            - var userFrom = notification.userFrom;
+            - var text = notification.notificationType == "postLike" ? "gostou do teu post" : "repostou o teu post";
+            - var icon = notification.notificationType == "postLike" ? "fa-heart text-red-500" : "fa-retweet text-green-500";
+
+            a.flex.p-4.border-b.border-gray-border.hover_bg-gray-50(href=`/profile/${userFrom.userhandle}`)
+                .mr-4
+                    i.fa-solid(class=icon).text-2xl
+                .flex.flex-col
+                    .flex.items-center
+                        img(src=userFrom.profilePic || "/images/profilePic.jpeg", class="w-8 h-8 rounded-full mr-2")
+                        span.font-bold.mr-1 #{userFrom.firstName}
+                        span.text-gray-500 #{text}

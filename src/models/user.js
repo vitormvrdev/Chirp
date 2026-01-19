@@ -37,6 +37,11 @@ const UserSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Post' 
     }],
+    // Array com IDs dos posts que o user fez repost
+    retweets: [{ 
+        type: Schema.Types.ObjectId, 
+        ref: 'Post' 
+    }],
     // Self-reference: Users a seguir outros Users
     followers: [{ 
         type: Schema.Types.ObjectId, 

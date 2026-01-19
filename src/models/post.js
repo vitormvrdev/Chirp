@@ -6,7 +6,6 @@ const PostSchema = new Schema({
         type: String, 
         trim: true 
     },
-    // Referência ao User que criou o post
     postedBy: { 
         type: Schema.Types.ObjectId, 
         ref: 'User' 
@@ -15,18 +14,22 @@ const PostSchema = new Schema({
         type: Boolean,
         default: false
     },
-    // Array de Users que deram like neste post específico
+    // Array de Users que deram like
     likes: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'User' 
+    }], // Se quiseres garantir, podes por default: [] aqui, mas o Mongoose costuma lidar bem
+    
+    retweetUsers: [{ 
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }],
-
+    
     retweetData: {
         type: Schema.Types.ObjectId,
-        ref: 'Post' // Aponta para o próprio modelo 'Post'
+        ref: 'Post'
     },
     
-    // Opcional: Para teres imagens nos posts no futuro
     imageUrl: {
         type: String
     }
