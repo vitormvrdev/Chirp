@@ -1,0 +1,42 @@
+extends layouts/main-layout.pug
+
+block content
+    if !profileUser
+        .flex.flex-col.items-center.justify-center.py-20
+            i.fa-solid.fa-user-slash.text-6xl.text-gray-300.mb-4
+            span.text-gray-500 Utilizador não encontrado.
+    else
+        // Back Button
+        .flex.items-center.p-4.border-b.border-gray-border
+            a.mr-4.p-2.rounded-full(href=`/profile/${profileUser.userhandle}`, class="hover:bg-gray-100")
+                i.fa-solid.fa-arrow-left.text-gray-700
+            .flex.flex-col
+                span.font-bold.text-lg #{profileUser.firstName} #{profileUser.lastName}
+                span.text-gray-500.text-sm @#{profileUser.userhandle}
+
+        // Tabs
+        .flex.border-b.border-gray-border
+            a.flex-1.text-center.p-4.font-medium(
+                href=`/profile/${profileUser.userhandle}/followers`
+                class=listType === 'followers' ? 'text-blue-500 border-b-4 border-blue-500 font-bold' : 'text-gray-500 hover:bg-gray-50'
+            ) Seguidores
+            a.flex-1.text-center.p-4.font-medium(
+                href=`/profile/${profileUser.userhandle}/following`
+                class=listType === 'following' ? 'text-blue-500 border-b-4 border-blue-500 font-bold' : 'text-gray-500 hover:bg-gray-50'
+            ) A seguir
+
+        // Users List
+        if users.length === 0
+            .flex.flex-col.items-center.justify-center.py-16
+                i.fa-solid.fa-users-slash.text-6xl.text-gray-300.mb-4
+                if listType === 'followers'
+                    span.text-gray-500 Ainda sem seguidores.
+                else
+                    span.text-gray-500 Ainda não segue ninguém.
+        else
+            each user in users
+                a.flex.items-center.p-4.border-b.border-gray-border(href=`/profile/${user.userhandle}`, class="hover:bg-gray-50")
+                    img.w-12.h-12.rounded-full.mr-4.object-cover(src=user.profilePic || "/images/profile_pic.png")
+                    .flex.flex-col.flex-grow
+                        span.font-bold #{user.firstName} #{user.lastName}
+                        span.text-gray-500 @#{user.userhandle}

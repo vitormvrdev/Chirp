@@ -1,9 +1,10 @@
 $(document).ready(() => {
-    loadPosts();
+    loadPosts(1);
+    initInfiniteScroll(loadPosts);
 });
 
-function loadPosts() {
-    $.get("/api/posts", { postedBy: profileUserId }, (results) => {
-        outputPosts(results, $(".postsContainer"));
+function loadPosts(page = 1) {
+    return $.get(`/api/posts?postedBy=${profileUserId}&page=${page}&limit=20`, (results) => {
+        outputPosts(results, $('.postsContainer'), page > 1);
     });
 }

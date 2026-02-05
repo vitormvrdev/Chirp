@@ -2,27 +2,48 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const NotificationSchema = new Schema({
-    userTo: { type: Schema.Types.ObjectId, ref: 'User' }, // Quem recebe
-    userFrom: { type: Schema.Types.ObjectId, ref: 'User' }, // Quem fez a ação
-    notificationType: { type: String }, // 'postLike' ou 'retweet'
-    entityId: { type: Schema.Types.ObjectId }, // O ID do Post
-    opened: { type: Boolean, default: false } // Se já foi lida
+    userTo: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userFrom: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    notificationType: {
+        type: String,
+        enum: ['postLike', 'retweet', 'follow', 'comment'],
+        required: true
+    },
+    entityId: { type: Schema.Types.ObjectId },
+    opened: { type: Boolean, default: false }
 }, { timestamps: true });
 
-NotificationSchema.statics.insertNotification = async (userTo, userFrom, notificationType, entityId) => {
-    var data = {
-        userTo: userTo,
-        userFrom: userFrom,
-        notificationType: notificationType,
-        entityId: entityId
-    };
-    // Não criar notificação para nós próprios
-    if(userTo == userFrom) return;
+// Index for faster queries
+NotificationSchema.index({ userTo: 1, createdAt: -1 });
+NotificationSchema.index({ userTo: 1, opened: 1 });
 
-    // Apagar notificação anterior se já existir (para não duplicar likes)
-    await mongoose.model("Notification").deleteOne(data).catch(error => console.log(error));
-    
-    return mongoose.model("Notification").create(data).catch(error => console.log(error));
-}
+NotificationSchema.statics.insertNotification = async function(userTo, userFrom, notificationType, entityId) {
+    // Don't create notification for yourself
+    if (userTo.toString() === userFrom.toString()) return null;
+
+    const data = {
+        userTo,
+        userFrom,
+        notificationType,
+        entityId
+    };
+
+    // Delete existing similar notification to avoid duplicates
+    await this.deleteOne(data);
+
+    return this.create(data);
+};
+
+NotificationSchema.statics.getUnreadCount = async function(userId) {
+    return this.countDocuments({ userTo: userId, opened: false });
+};
+
+NotificationSchema.statics.markAsRead = async function(userId, notificationIds = null) {
+    const query = { userTo: userId };
+    if (notificationIds) {
+        query._id = { $in: notificationIds };
+    }
+    return this.updateMany(query, { opened: true });
+};
 
 module.exports = mongoose.model('Notification', NotificationSchema);

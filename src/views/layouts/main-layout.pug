@@ -6,14 +6,14 @@ html(lang="pt")
         title #{pageTitle} - Chirp
 
         script(src="https://code.jquery.com/jquery-3.7.0.min.js")
-        
-        // --- TAILWIND CSS ---
+
+        // Tailwind CSS
         script(src="https://cdn.tailwindcss.com")
-        
-        // --- FONT AWESOME ---
+
+        // Font Awesome
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css")
 
-        // --- CONFIGURAÇÃO DO TEMA ---
+        // Theme Configuration
         script.
             tailwind.config = {
                 theme: {
@@ -28,52 +28,80 @@ html(lang="pt")
 
     body.bg-white
         .container.mx-auto.h-screen.flex.max-w-7xl
-            
-            // --- COLUNA 1: BARRA LATERAL (Esquerda) ---
-            // AQUI ESTAVA O ERRO: Mudámos para class="..."
+
+            // Sidebar (Left)
             div(class="w-20 md:w-64 flex-shrink-0 border-r border-gray-border pt-2 px-2 flex flex-col items-center md:items-start")
-                
+
                 // Logo
                 a(class="p-3 rounded-full hover:bg-blue-50 mb-2" href="/")
                     i.fa-solid.fa-dove.text-3xl.text-blue-500
-                
-                // Navegação
-                nav.space-y-2.w-full
+
+                // Navigation
+                nav.space-y-1.w-full
                     a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl font-bold" href="/")
                         i.fa-solid.fa-house.text-2xl.mr-4
                         span(class="hidden md:inline") Home
-                    
+
                     a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl" href="/search")
                         i.fa-solid.fa-magnifying-glass.text-2xl.mr-4
                         span(class="hidden md:inline") Explorar
 
-                    a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl" href="/notifications")
+                    a.relative(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl" href="/notifications")
                         i.fa-solid.fa-bell.text-2xl.mr-4
+                        span#notificationBadge.hidden.absolute.top-1.left-6.bg-blue-500.text-white.text-xs.rounded-full.w-5.h-5.flex.items-center.justify-center.font-bold
                         span(class="hidden md:inline") Notificações
 
                     a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl" href="/profile")
                         i.fa-regular.fa-user.text-2xl.mr-4
                         span(class="hidden md:inline") Perfil
-                    
-                    a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl" href="/logout")
-                        i.fa-solid.fa-arrow-right-from-bracket.text-2xl.mr-4
-                        span(class="hidden md:inline") Logout
 
-            // --- COLUNA 2: CONTEÚDO PRINCIPAL (Meio) ---
-            .flex-grow.border-r.border-gray-border.max-w-2xl
-                // Título da Página
+                    a(class="flex items-center p-3 rounded-full hover:bg-gray-hover transition-colors text-xl text-red-500" href="/logout")
+                        i.fa-solid.fa-arrow-right-from-bracket.text-2xl.mr-4
+                        span(class="hidden md:inline") Sair
+
+                // Profile Card (Desktop)
+                if userLoggedIn
+                    .mt-auto.mb-4.w-full(class="hidden md:block")
+                        a.flex.items-center.p-3.rounded-full(href="/profile", class="hover:bg-gray-hover")
+                            img.w-10.h-10.rounded-full.mr-3.object-cover(src=userLoggedIn.profilePic || "/images/profile_pic.png")
+                            .flex.flex-col.flex-grow.overflow-hidden
+                                span.font-bold.text-sm.truncate #{userLoggedIn.firstName} #{userLoggedIn.lastName}
+                                span.text-gray-500.text-xs.truncate @#{userLoggedIn.userhandle}
+
+            // Main Content (Center)
+            .flex-grow.border-r.border-gray-border.max-w-2xl.overflow-y-auto
+                // Page Title
                 div(class="sticky top-0 z-10 bg-white bg-opacity-95 backdrop-blur-sm border-b border-gray-border px-4 py-3")
                     h2.text-xl.font-bold.text-gray-900 #{pageTitle}
 
                 block content
 
-            // --- COLUNA 3: WIDGETS (Direita) ---
-            div(class="hidden lg:block w-80 pl-8 pt-4")
+            // Widgets (Right)
+            div(class="hidden lg:block w-80 pl-6 pt-4")
+                // Search Box
+                .mb-4
+                    form(action="/search" method="GET").relative
+                        i.fa-solid.fa-magnifying-glass.absolute.left-4.text-gray-400(style="top: 50%; transform: translateY(-50%);")
+                        input.w-full.bg-gray-100.rounded-full.py-3.pl-12.pr-4.outline-none(
+                            type="text"
+                            name="q"
+                            placeholder="Pesquisar..."
+                            class="focus:bg-white focus:ring-2 focus:ring-blue-500"
+                        )
+
+                // Trending
                 .bg-gray-light.rounded-2xl.p-4
-                    h3.font-bold.text-xl.mb-2 O que está a acontecer
-                    p.text-gray-500 Em breve...
+                    h3.font-bold.text-xl.mb-4 Tendências
+                    .space-y-4
+                        .text-gray-500.text-sm Em breve...
+
+                // Footer Links
+                .mt-4.text-xs.text-gray-400.space-x-2
+                    span Chirp &copy; #{new Date().getFullYear()}
+
+        // Global userLoggedIn variable
         script.
             var userLoggedIn = !{userLoggedInJs};
-            
-        // O nosso script personalizado
+
+        // Common JS
         script(src="/js/common.js")

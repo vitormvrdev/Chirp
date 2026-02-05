@@ -1,0 +1,52 @@
+extends layouts/main-layout.pug
+
+block content
+    // Search Box
+    .p-4.border-b.border-gray-border
+        form(action="/search" method="GET").flex
+            .flex-grow.relative
+                i.fa-solid.fa-magnifying-glass.absolute.left-4.text-gray-400(style="top: 50%; transform: translateY(-50%);")
+                input#searchInput.w-full.bg-gray-100.rounded-full.py-3.pl-12.pr-4.outline-none(
+                    type="text"
+                    name="q"
+                    placeholder="Pesquisar utilizadores ou posts..."
+                    value=query
+                    autocomplete="off"
+                    class="focus:bg-white focus:ring-2 focus:ring-blue-500"
+                )
+
+    if query
+        // Results
+        if users.length > 0
+            .border-b.border-gray-border.pb-4
+                h3.px-4.py-2.font-bold.text-lg Utilizadores
+                each user in users
+                    a.flex.items-center.p-4(href=`/profile/${user.userhandle}`, class="hover:bg-gray-50")
+                        img.w-12.h-12.rounded-full.mr-3(src=user.profilePic || "/images/profile_pic.png")
+                        .flex.flex-col
+                            span.font-bold #{user.firstName} #{user.lastName}
+                            span.text-gray-500 @#{user.userhandle}
+
+        if posts.length > 0
+            h3.px-4.py-3.font-bold.text-lg.border-b.border-gray-border Posts
+            .postsContainer
+
+        if users.length === 0 && posts.length === 0
+            .p-8.text-center
+                i.fa-solid.fa-magnifying-glass.text-6xl.text-gray-300.mb-4
+                p.text-gray-500 Nenhum resultado encontrado para "#{query}"
+    else
+        // Trending / Explore
+        .p-4
+            h3.font-bold.text-xl.mb-4 Tendências
+            .bg-gray-50.rounded-xl.p-4
+                p.text-gray-500 As tendências aparecem aqui quando houver mais atividade.
+
+    script.
+        var searchResults = !{JSON.stringify(posts || [])};
+
+    script(src="/js/common.js")
+    script.
+        if (searchResults && searchResults.length > 0) {
+            outputPosts(searchResults, $('.postsContainer'));
+        }
