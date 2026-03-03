@@ -93,10 +93,11 @@ $('#submitPostButton').click(async (event) => {
 
     } catch (error) {
         console.error('Error creating post:', error);
-        showToast('Erro ao criar post', 'error');
+        const msg = error.responseJSON?.message || 'Erro ao criar post';
+        showToast(msg, 'error');
     }
 
-    button.addClass('opacity-50 cursor-not-allowed');
+    button.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
 });
 
 // Output posts
@@ -129,7 +130,7 @@ function outputPosts(results, container, append = false) {
 // Create post HTML
 function createPostHtml(postData) {
     // Retweet logic
-    var isRetweet = postData.retweetData !== undefined;
+    var isRetweet = postData.retweetData != null;
     var retweetedBy = isRetweet ? postData.postedBy.userhandle : null;
 
     if (isRetweet) {
